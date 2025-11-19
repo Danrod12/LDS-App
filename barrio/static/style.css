@@ -1,0 +1,12 @@
+/* Fuente global del sitio */
+body {
+    font-family: 'Inter', sans-serif !important;
+}
+
+
+h1, h2, h3, h4, h5, h6 {
+    font-weight: 600;
+}
+body {
+    background-color: rgb(177, 7, 7) !important;
+}

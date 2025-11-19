@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-4">
+
+{% for item in obras %}
+    <p>{{ item.nombre }}</p>
+    <p>{{ item.nota }}</p>
+    <p>{{ item.fecha_meta }}</p>
+{% endfor %}
+
+{% endblock %}

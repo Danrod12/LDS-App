@@ -1,0 +1,118 @@
+
+
+{% extends 'base.html' %}
+{% block title %}Dashboard{% endblock %}
+{% load static %}
+{% block content %}
+<div class="container mt-5">
+
+  <h2 class="text-center mb-4">Panel de Obras Misionales</h2>
+
+  <!-- 🔹 Formulario para crear nueva obra -->
+  <div class="card shadow-sm mb-5">
+    <div class="card-body">
+      <h5 class="card-title mb-3">Agregar nueva obra</h5>
+
+      <form method="POST">
+        {% csrf_token %}
+
+        <!-- Organizacíon -->
+        <div class="mb-3">
+          <label for="id_organizacion" class="form-label fw-semibold">Organización</label>
+          {{ form.organizacion }}
+        </div>
+
+        <!-- Nombre -->
+        <div class="mb-3">
+          <label for="id_condicion_actual" class="form-label fw-semibold">Condición Actual</label>
+          {{ form.condicion_actual }}
+        </div>
+        <div class="mb-3">
+          <label for="id_nombre" class="form-label fw-semibold">Nombre</label>
+          {{ form.nombre }}
+        </div>
+        <div class="mb-3">
+          <label for="id_meta" class="form-label fw-semibold">Meta</label>
+          {{ form.meta }}
+        </div>
+        <div class="mb-3">
+          <label for="id_ordenanza_faltante" class="form-label fw-semibold">Ordenanza Faltante</label>
+          {{ form.ordenanza_faltante }}
+        </div>
+        <!-- Fechas -->
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <label for="id_fecha_establecida" class="form-label fw-semibold">Fecha de Inicio</label>
+            {{ form.fecha_establecida }}
+        </div>
+        <div class="col-md-6 mb-3">
+            <label for="id_fecha_meta" class="form-label fw-semibold">Fecha Meta</label>
+            {{ form.fecha_meta }}
+        </div>
+    </div>
+    
+    <!-- Completado -->
+        <button type="submit" class="btn btn-primary w-100">Guardar</button>
+    </form>
+</div>
+</div>
+
+  <!-- 🔹 Tabla para mostrar obras existentes -->
+  <div class="card shadow-sm">
+    <div class="card-body">
+      <h5 class="card-title mb-3">Obras registradas</h5>
+      
+      {% if obras %}
+      <table class="table table-hover align-middle">
+          <thead>
+              <tr>
+            <th>Organización</th>
+            <th>Nombre</th>
+            <th>Inicio</th>
+            <th>Meta</th>
+            <th>Completado</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for o in obras %}
+          <tr>
+            <td>{{ o.organizacion }}</td>
+            <td>{{ o.nombre }}</td>
+            <td>{{ o.fecha_establecida|date:"d/m/Y" }}</td>
+            <td>{{ o.fecha_meta|date:"d/m/Y" }}</td>
+            <td>
+                {% if o.done %}
+                ✅
+                {% else %}
+                ❌
+                {% endif %}
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p class="text-muted">Aún no hay obras registradas.</p>
+    {% endif %}
+</div>
+</div>
+
+</div>
+{% endblock %}
+
+
+{% comment %} {% extends "base.html" %}
+
+{% block content %} 
+
+
+<select>
+    {% for clave, organizacion in organizaciones %}
+        <option value=>{{ organizacion }}</option>
+    {% endfor %}
+</select>
+
+
+
+
+{% endblock %} {% endcomment %}
