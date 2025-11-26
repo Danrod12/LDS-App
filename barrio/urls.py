@@ -16,5 +16,8 @@ urlpatterns = [
     path('obispado/', views.obispado, name='obispado'),
     path('socsoc/', views.socsoc, name='socsoc'),
     path('api/', include(router.urls)),
+    path('completar/<int:obra_id>/', views.marcar_completado, name='marcar_completado'),
+    # path("login/", views.login_view, name="login"),
+
 ]
 

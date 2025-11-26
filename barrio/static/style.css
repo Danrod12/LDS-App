@@ -1,12 +1,99 @@
-/* Fuente global del sitio */
+/* Fuente global */
 body {
     font-family: 'Inter', sans-serif !important;
+    background-color: #f7f9fc; /* gris suave y moderno */
+    color: #333;
 }
 
+/* Títulos */
+h1, h2, h3 {
+    font-weight: 700;
+    color: #1a2b4c; /* azul oscuro elegante */
+}
 
-h1, h2, h3, h4, h5, h6 {
+/* Contenedor principal */
+.container-custom {
+    max-width: 900px;
+    margin: auto;
+    padding: 20px;
+}
+
+/* Tarjetas */
+.card-custom {
+    background: white;
+    border-radius: 12px;
+    padding: 25px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    margin-bottom: 30px;
+}
+
+/* Lista de personas */
+.persona-item {
+    padding: 12px 18px;
+    background: #ffffff;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+}
+
+.persona-nombre {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #2b4a80;
+}
+
+.persona-fecha {
+    font-size: 0.95rem;
+    color: #444;
+    margin-top: -4px;
+}
+
+/* Header */
+.header-title {
+    color: white;
+    font-size: 1.8rem;
+    margin-bottom: 0;
     font-weight: 600;
 }
-body {
-    background-color: rgb(177, 7, 7) !important;
+
+/* Footer */
+footer {
+    background: #1a1a1a;
+    color: #eee;
+}
+
+
+                                                        /* BARRA DE NAVEGACION */
+.navbar-custom {
+    background: #1a2b4c; /* azul oscuro */
+    padding: 10px 0;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+.navbar-custom ul {
+    list-style: none;
+    display: flex;
+    justify-content: center;
+    gap: 25px;
+    margin: 0;
+    padding: 0;
+}
+
+.navbar-custom li {
+    display: inline;
+}
+
+.navbar-custom a {
+    color: #ffffff;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 1rem;
+    padding: 6px 10px;
+    transition: 0.2s ease-in-out;
+}
+
+.navbar-custom a:hover {
+    background: #ffffff33;
+    border-radius: 6px;
+    padding: 6px 10px;
 }

@@ -1,12 +1,33 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="container mt-4">
+<div class="container-custom mt-4">
 
-{% for item in obras %}
-    <p>{{ item.nombre }}</p>
-    <p>{{ item.nota }}</p>
-    <p>{{ item.fecha_meta }}</p>
-{% endfor %}
+    <h2 class="text-center mb-4">Personas y Metas de la Primaria</h2>
 
+    {% for item in obras %}
+    <div class="persona-item shadow-sm">
+        <div class="persona-nombre">{{ item.nombre }}</div>
+
+        {% if item.nota %}
+        <div class="persona-fecha">
+            <strong>Nota:</strong> {{ item.nota }}
+        </div>
+        {% endif %}
+
+        <div class="persona-fecha">
+            <strong>Meta para:</strong> {{ item.fecha_meta|date:"M d, Y" }}
+        </div>
+<form method="POST" action="{% url 'marcar_completado' item.id %}" class="d-inline">
+    {% csrf_token %}
+    <input 
+        type="checkbox" 
+        name="done"
+        onchange="this.form.submit()"
+        {% if item.done %}checked{% endif %}
+    >
+</form>
+
+    </div>
+    {% endfor %}
 {% endblock %}

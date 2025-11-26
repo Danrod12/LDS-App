@@ -48,3 +48,6 @@ class ObraMisionalForm(forms.ModelForm):
             'fecha_establecida': 'Establecido',
             'fecha_meta': 'Fecha meta',
         }
+
+# class LoginForm(forms.Form):
+#     pin = forms.CharField(label="PIN", widget=forms.PasswordInput)
