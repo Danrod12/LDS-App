@@ -9,12 +9,12 @@
     <div class="persona-item shadow-sm">
         <div class="persona-nombre">{{ item.nombre }}</div>
 
-        {% if item.nota %}
+        {% if item.meta %}
         <div class="persona-fecha">
-            <strong>Nota:</strong> {{ item.nota }}
+            <strong>Meta:</strong> {{ item.meta }}
         </div>
         {% endif %}
-
+        
         <div class="persona-fecha">
             <strong>Meta para:</strong> {{ item.fecha_meta|date:"M d, Y" }}
         </div>

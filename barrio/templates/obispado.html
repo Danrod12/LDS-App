@@ -13,8 +13,8 @@
               <tr>
             <th>Organización</th>
             <th>Nombre</th>
-            <th>Inicio</th>
             <th>Meta</th>
+            <th>Fecha</th>
             <th>Completado</th>
           </tr>
         </thead>
@@ -23,7 +23,7 @@
           <tr>
             <td>{{ o.organizacion }}</td>
             <td>{{ o.nombre }}</td>
-            <td>{{ o.fecha_establecida|date:"d/m/Y" }}</td>
+            <td>{{ o.meta }}</td>
             <td>{{ o.fecha_meta|date:"d/m/Y" }}</td>
             <td>
                 {% if o.done %}

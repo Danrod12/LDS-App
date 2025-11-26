@@ -1,5 +1,3 @@
-
-
 {% extends 'base.html' %}
 {% block title %}Dashboard{% endblock %}
 {% load static %}
@@ -41,10 +39,6 @@
         </div>
         <!-- Fechas -->
         <div class="row">
-          <div class="col-md-6 mb-3">
-            <label for="id_fecha_establecida" class="form-label fw-semibold">Fecha de Inicio</label>
-            {{ form.fecha_establecida }}
-        </div>
         <div class="col-md-6 mb-3">
             <label for="id_fecha_meta" class="form-label fw-semibold">Fecha Meta</label>
             {{ form.fecha_meta }}
@@ -78,7 +72,6 @@
           <tr>
             <td>{{ o.organizacion }}</td>
             <td>{{ o.nombre }}</td>
-            <td>{{ o.fecha_establecida|date:"d/m/Y" }}</td>
             <td>{{ o.fecha_meta|date:"d/m/Y" }}</td>
             <td>
                 {% if o.done %}
@@ -98,6 +91,32 @@
 </div>
 
 </div>
+
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+    const condicionSelect = document.getElementById("id_condicion_actual");
+    const metaSelect = document.getElementById("id_meta");
+
+    condicionSelect.addEventListener("change", function() {
+        const condicion = this.value;
+
+        fetch(`/cargar_metas/?condicion=${condicion}`)
+        .then(response => response.json())
+        .then(data => {
+            metaSelect.innerHTML = ""; // limpia
+
+            data.forEach(item => {
+                const option = document.createElement("option");
+                option.value = item[0];
+                option.textContent = item[1];
+                metaSelect.appendChild(option);
+            });
+        });
+    });
+});
+</script>
+
 {% endblock %}
 
 

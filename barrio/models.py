@@ -1,59 +1,101 @@
 from django.db import models
-import csv
 
+
+# ============================================
+#   LISTAS DE METAS SEGÚN CONDICIÓN
+# ============================================
+class Meta(models.Model):
+
+    MENOS_ACTIVOS = [
+        ("MA_DOMINGOS4", "Llegar 4 domingos consecutivos"),
+        ("MA_ACTIVIDADES", "Ir a actividades de la iglesia"),
+        ("MA_HOGAR", "Hacer noches de hogar"),
+        ("MA_TEMPLO", "Ir al templo"),
+        ("MA_EDUCACION", "Participar en programas de educación BYU / Becas / FPE / Mentors"),
+        ("MA_ARBOL", "Trabajar en su árbol familiar"),
+    ]
+
+    ACTIVOS = [
+        ("AC_AMIGOS", "Hacerse de uno o más amigos recién conversos"),
+        ("AC_TEMPLO", "Ir al templo"),
+        ("AC_MISIONEROS", "Apoyar en las visitas con los misioneros"),
+        ("AC_EDUCACION", "Participar en programas de educación BYU / Becas / FPE / Mentors"),
+        ("AC_ACTIVIDADES", "Participar de las actividades de la iglesia"),
+        ("AC_ORIENTAR", "Orientar y apoyar a conversos y menos activos"),
+        ("AC_LIMPIEZA", "Apoyar en la limpieza de la capilla"),
+        ("AC_HOGAR", "Hacer noches de hogar"),
+    ]
+
+    CONVERSOS = [
+        ("CV_ARBOL", "Trabajar en su árbol familiar"),
+        ("CV_TEMPLO", "Ir al templo"),
+        ("CV_HOGAR", "Hacer noches de hogar"),
+        ("CV_ACTIVIDADES", "Participar en actividades de la iglesia"),
+        ("CV_DOMINGOS", "Llegar todos los domingos según posibilidades"),
+        ("CV_EDUCACION", "Programas BYU / Becas / FPE / Mentors"),
+        ("CV_CLASES", "Aprender a dar clases"),
+    ]
+
+    QUORUM_SOCSOC = [
+        ("QS_AUTOSUFICIENCIA", "Participar en autosuficiencia"),
+        ("QS_BAUTIZOS_JOVENES", "Acompañar a jóvenes en bautizos del templo"),
+        ("QS_ORDENANZAS", "Hacer ordenanzas mayores tras 1 año"),
+    ]
+
+    JOVENES = [
+        ("JOV_LEMA", "Aprenderse el lema de HJ/MJ"),
+    ]
+
+    INVESTIGADORES = [
+        ("INV_LIBRO_MORMON", "Leer el Libro de Mormón"),
+        ("INV_ESCRITURAS", "Leer las escrituras"),
+        ("INV_DOMINGOS3", "Asistir a 3 domingos consecutivos"),
+        ("INV_ACTIVIDADES", "Participar en actividades del barrio"),
+        ("INV_AMIGO", "Hacerse de un amigo"),
+        ("INV_TEMPLO", "Ir al templo"),
+    ]
+
+    class Meta:
+        managed = False   # No crea tabla
+        verbose_name = "Meta"
+        verbose_name_plural = "Metas"
+
+
+# ============================================
+#              MODELO OBRA MISIONAL
+# ============================================
 class ObraMisional(models.Model):
-    organizaciones = [
-        ("QUORUM", "Quorum de Elderes"),
+
+    ORGANIZACIONES = [
+        ("QUORUM", "Quórum de Élderes"),
         ("SOCSOC", "Sociedad de Socorro"),
-        ("MUJERES", "Mujeres Jóvenes"),
         ("HOMBRES", "Hombres Jóvenes"),
-        ("PRIMARIA", "Primaria")
+        ("MUJERES", "Mujeres Jóvenes"),
+        ("PRIMARIA", "Primaria"),
     ]
 
-    condicion = [
-        ("INVESTIGADOR","Investigador"),
-        ("CONVERSO","Converso"),
-        ("LESSACTIVE","Menos Activo"),
-        ("ACTIVO","Activo")
+    CONDICIONES = [
+        ("MENOS_ACTIVOS", "Menos activos"),
+        ("ACTIVOS", "Activos"),
+        ("CONVERSOS", "Conversos"),
+        ("INVESTIGADORES", "Investigadores"),
     ]
 
-    ordenanza = [
-        ("BAUSTISMO","Bautismo"),
-        ("VICARIO","Bautismo Vicario"),
-        ("Activacion","Activación"),
-        ("INVESTIDURA","Investidura"),
-        ("SELLAMIENTO","Sellamiento")
+    ORDENANZAS = [
+        ("BAUTISMO", "Bautismo"),
+        ("INVESTIDURA", "Investidura"),
+        ("SELLAMIENTO", "Sellamiento"),
     ]
-    
-    goal = [("LEER","Leer las Escrituras"),
-            ("ORAR ","Orar"),]
 
-
-    organizacion = models.CharField(max_length=100, choices=organizaciones, verbose_name='Organizacion', blank=True, null=True)
-    condicion_actual = models.CharField(max_length=100, choices=condicion, verbose_name='Condición Actual', blank=True, null=True)
-    nombre = models.CharField(max_length=100, verbose_name='Nombre', blank=True, null=True)
-    meta = models.TextField(verbose_name='Meta', blank=True, null=True)
-    ordenanza_faltante = models.CharField(max_length=100, choices=ordenanza, verbose_name='Ordenanza Faltante', blank=True, null=True)
-    fecha_establecida = models.DateField(verbose_name='Fecha Establecida', blank=True, null=True)
-    fecha_meta = models.DateField(verbose_name='Fecha de Meta', blank=True, null=True)
-    done = models.BooleanField(default=False, verbose_name='Completado')
+    # ✔ Ningún campo obligatorio, todos pueden ser NULL
+    organizacion = models.CharField(max_length=20, choices=ORGANIZACIONES, null=True, blank=True)
+    condicion_actual = models.CharField(max_length=20, choices=CONDICIONES, null=True, blank=True)
+    nombre = models.CharField(max_length=120, null=True, blank=True)
+    meta = models.CharField(max_length=50, null=True, blank=True)
+    ordenanza_faltante = models.CharField(max_length=50, choices=ORDENANZAS, null=True, blank=True)
+    fecha_meta = models.DateField(null=True, blank=True)
+    done = models.BooleanField(default=False)
 
     def __str__(self):
-        return self.nombre if self.nombre else "(Sin nombre)"
+        return self.nombre or "Sin nombre"
 
-# class LoginUser(models.Model):
-    
-#     organizaciones = [
-#         ("QUORUM", "Quorum de Elderes"),
-#         ("SOCSOC", "Sociedad de Socorro"),
-#         ("MUJERES", "Mujeres Jóvenes"),
-#         ("HOMBRES", "Hombres Jóvenes"),
-#         ("PRIMARIA", "Primaria"),
-#         ("OBISPADO", "Obispado"),
-#     ]
-
-#     pin = models.CharField(max_length=10, unique=True, verbose_name="PIN")
-#     organizacion = models.CharField(max_length=20, choices=organizaciones)
-
-#     def __str__(self):
-#         return f"{self.organizacion} ({self.pin})"
