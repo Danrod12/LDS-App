@@ -1,0 +1,26 @@
+
+{% extends "inicio.html" %}
+{% block content %}
+
+<h2>Crear cuenta de barrio</h2>
+
+<form method="POST">
+    {% csrf_token %}
+
+    <input type="text" name="nombre" placeholder="Nombre del barrio" required>
+    <br><br>
+
+    <input type="text" name="estaca" placeholder="Estaca" required>
+    <br><br>
+
+    <button type="submit">Crear barrio</button>
+</form>
+
+{% if codigo %}
+    <h3>✔ Barrio creado con éxito</h3>
+    <p>Tu código de acceso es:</p>
+    <h1>{{ codigo }}</h1>
+    <p>Guárdalo para iniciar sesión</p>
+{% endif %}
+
+{% endblock %}

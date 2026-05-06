@@ -9,6 +9,9 @@ router.register(r'obras', ObraMisionalViewSet)
 
 urlpatterns = [
     path('', views.dashboard, name='dashboard'),
+    path("crear-barrio/", views.crear_barrio, name="crear_barrio"),
+    path("login/", views.login_barrio, name="login_barrio"),
+    path('log/', views.log, name='log'),
     path("cargar_metas/", views.cargar_metas, name="cargar_metas"),
     path('hjovenes/', views.hjovenes, name='hjovenes'),
     path('mjovenes/', views.mjovenes, name='mjovenes'),

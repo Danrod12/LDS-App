@@ -11,17 +11,61 @@ class ObraMisionalViewSet(viewsets.ModelViewSet):
     queryset = ObraMisional.objects.all()
     serializer_class = ObraMisionalSerializer
 
+def crear_barrio(request):
+    if request.method == "POST":
+        nombre = request.POST.get("nombre")
+        estaca = request.POST.get("estaca")
 
+        barrio = Barrio.objects.create(
+            nombre=nombre,
+            estaca=estaca
+        )
+
+        return render(request, "crear_barrio.html", {
+            "codigo": barrio.codigo
+        })
+
+    return render(request, "crear_barrio.html")
+
+
+
+def login_barrio(request):
+    if request.method == "POST":
+        codigo = request.POST.get("codigo")
+
+        try:
+            barrio = Barrio.objects.get(codigo=codigo)
+
+            # guardar en sesión
+            request.session["barrio_id"] = barrio.id
+            request.session["barrio_nombre"] = barrio.nombre
+
+            return redirect("dashboard")
+
+        except Barrio.DoesNotExist:
+            return render(request, "login.html", {
+                "error": "Código inválido"
+            })
+
+    return render(request, "login.html")
 # ============================================
 #                 DASHBOARD
 # ============================================
 def dashboard(request):
-    obras = ObraMisional.objects.all()
+    barrio_id = request.session.get("barrio_id")
+
+    if not barrio_id:
+        return redirect("login_barrio")
+
+    # 🔥 ahora solo del barrio activo
+    obras = ObraMisional.objects.filter(barrio_id=barrio_id)
 
     if request.method == 'POST':
         form = ObraMisionalForm(request.POST)
         if form.is_valid():
-            form.save()
+            obra = form.save(commit=False)
+            obra.barrio_id = barrio_id  # 🔗 clave del sistema
+            obra.save()
             return redirect('dashboard')
     else:
         form = ObraMisionalForm()
@@ -31,37 +75,71 @@ def dashboard(request):
         'obras': obras
     })
 
-
 # ============================================
 #      FILTROS POR ORGANIZACIÓN
 # ============================================
+def log(request):
+    obras = ObraMisional.objects.filter(organizacion='LOP')
+    return render(request, 'log.html', {'obras': obras})
+
 def obispado(request):
-    obras = ObraMisional.objects.all()
+    barrio_id = request.session.get("barrio_id")
+
+    if not barrio_id:
+        return redirect("login_barrio")
+
+    obras = ObraMisional.objects.filter(barrio_id=barrio_id)
+
     return render(request, 'obispado.html', {'obras': obras})
 
 
 def quorum(request):
-    obras = ObraMisional.objects.filter(organizacion='QUORUM')
+    barrio_id = request.session.get("barrio_id")
+
+    if not barrio_id:
+        return redirect("login_barrio")
+
+    obras = ObraMisional.objects.filter(barrio_id=barrio_id, organizacion='QUORUM')
     return render(request, 'quorum.html', {'obras': obras})
 
 
 def socsoc(request):
-    obras = ObraMisional.objects.filter(organizacion='SOCSOC')
+    barrio_id = request.session.get("barrio_id")
+
+    if not barrio_id:
+        return redirect("login_barrio")
+
+    obras = ObraMisional.objects.filter(barrio_id=barrio_id, organizacion='SOCSOC')
     return render(request, 'socsoc.html', {'obras': obras})
 
 
 def hjovenes(request):
-    obras = ObraMisional.objects.filter(organizacion='HOMBRES')
+    barrio_id = request.session.get("barrio_id")
+
+    if not barrio_id:
+        return redirect("login_barrio")
+
+    obras = ObraMisional.objects.filter(barrio_id=barrio_id, organizacion='HOMBRES')
     return render(request, 'hjovenes.html', {'obras': obras})
 
 
 def mjovenes(request):
-    obras = ObraMisional.objects.filter(organizacion='MUJERES')
+    barrio_id = request.session.get("barrio_id")
+
+    if not barrio_id:
+        return redirect("login_barrio")
+
+    obras = ObraMisional.objects.filter(barrio_id=barrio_id, organizacion='MUJERES')
     return render(request, 'mjovenes.html', {'obras': obras})
 
 
 def primaria(request):
-    obras = ObraMisional.objects.filter(organizacion='PRIMARIA')
+    barrio_id = request.session.get("barrio_id")
+
+    if not barrio_id:
+        return redirect("login_barrio")
+
+    obras = ObraMisional.objects.filter(barrio_id=barrio_id, organizacion='PRIMARIA')
     return render(request, 'primaria.html', {'obras': obras})
 
 

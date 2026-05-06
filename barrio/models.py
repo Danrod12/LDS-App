@@ -1,3 +1,4 @@
+import random
 from django.db import models
 
 
@@ -60,7 +61,25 @@ class Meta(models.Model):
         verbose_name = "Meta"
         verbose_name_plural = "Metas"
 
+class Barrio(models.Model):
+    nombre = models.CharField(max_length=120)
+    estaca = models.CharField(max_length=120)
+    codigo = models.CharField(max_length=4, unique=True, blank=True)
 
+    def save(self, *args, **kwargs):
+        # Generar código de 4 dígitos si no existe
+        if not self.codigo:
+            self.codigo = self.generar_codigo_unico()
+        super().save(*args, **kwargs)
+
+    def generar_codigo_unico(self):
+        while True:
+            codigo = str(random.randint(1000, 9999))
+            if not Barrio.objects.filter(codigo=codigo).exists():
+                return codigo
+
+    def __str__(self):
+        return f"{self.nombre} ({self.codigo})"
 # ============================================
 #              MODELO OBRA MISIONAL
 # ============================================
@@ -88,6 +107,7 @@ class ObraMisional(models.Model):
     ]
 
     # ✔ Ningún campo obligatorio, todos pueden ser NULL
+    barrio = models.ForeignKey(Barrio, on_delete=models.CASCADE, null=True, blank=True)
     organizacion = models.CharField(max_length=20, choices=ORGANIZACIONES, null=True, blank=True)
     condicion_actual = models.CharField(max_length=20, choices=CONDICIONES, null=True, blank=True)
     nombre = models.CharField(max_length=120, null=True, blank=True)
