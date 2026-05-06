@@ -1,7 +1,24 @@
 from django import forms
 from .models import *
 
+class PersonaForm(forms.ModelForm):
+        class Meta:
+            model = Persona
+            fields = ['nombre', 'organizacion']
+
+            widgets = {
+                'nombre': forms.TextInput(attrs={
+                    'class': 'form-control',
+                    'placeholder': 'Nombre de la persona'
+                }),
+                'organizacion': forms.Select(attrs={
+                    'class': 'form-select'
+                }),
+            }
+            
 class ObraMisionalForm(forms.ModelForm):
+
+
 
     class Meta:
         model = ObraMisional

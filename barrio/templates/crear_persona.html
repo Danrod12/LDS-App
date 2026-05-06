@@ -1,0 +1,27 @@
+{% extends 'inicio.html' %}
+
+{% block content %}
+
+<div class="container mt-4">
+
+    <h2>Crear Persona</h2>
+
+    <form method="POST">
+        {% csrf_token %}
+
+        <div class="mb-3">
+            {{ form.nombre }}
+        </div>
+
+        <div class="mb-3">
+            {{ form.organizacion }}
+        </div>
+
+        <button class="btn btn-primary">
+            Guardar Persona
+        </button>
+    </form>
+
+</div>
+
+{% endblock %}

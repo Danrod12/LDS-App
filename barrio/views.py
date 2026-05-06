@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from rest_framework import viewsets
 from .models import *
-from .forms import ObraMisionalForm
+from .forms import *
 from .serializers import ObraMisionalSerializer
 from django.http import JsonResponse
 
@@ -171,3 +171,21 @@ def cargar_metas(request):
         metas = []
 
     return JsonResponse(metas, safe=False)
+
+def crear_persona(request):
+    if request.method == "POST":
+        form = PersonaForm(request.POST)
+        if form.is_valid():
+            persona = form.save(commit=False)
+
+            # asignar barrio actual (IMPORTANTE)
+            persona.barrio = request.session.get("barrio_id")
+
+            persona.save()
+            return redirect("crear_persona")
+    else:
+        form = PersonaForm()
+
+    return render(request, "crear_persona.html", {
+        "form": form
+    })

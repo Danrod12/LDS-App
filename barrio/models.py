@@ -61,6 +61,7 @@ from django.db import models
 #         verbose_name = "Meta"
 #         verbose_name_plural = "Metas"
 
+
 class Barrio(models.Model):
     nombre = models.CharField(max_length=120)
     estaca = models.CharField(max_length=120)
@@ -83,6 +84,34 @@ class Barrio(models.Model):
 # ============================================
 #              MODELO OBRA MISIONAL
 # ============================================
+class Persona(models.Model):
+
+    ORGANIZACIONES = [
+        ("QUORUM", "Quórum de Élderes"),
+        ("SOCSOC", "Sociedad de Socorro"),
+        ("HOMBRES", "Hombres Jóvenes"),
+        ("MUJERES", "Mujeres Jóvenes"),
+        ("PRIMARIA", "Primaria"),
+    ]
+
+    barrio = models.ForeignKey(
+        Barrio,
+        on_delete=models.CASCADE
+    )
+
+    nombre = models.CharField(max_length=120)
+
+    organizacion = models.CharField(
+        max_length=20,
+        choices=ORGANIZACIONES
+    )
+
+    activo = models.BooleanField(default=True)
+
+    def __str__(self):
+        return self.nombre
+    
+    
 class ObraMisional(models.Model):
 
     ORGANIZACIONES = [
