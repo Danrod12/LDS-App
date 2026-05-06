@@ -97,3 +97,22 @@ footer {
     border-radius: 6px;
     padding: 6px 10px;
 }
+
+.izquierda {
+    display: block;
+    width: 30%;
+    float: left;
+    padding-right: 20px;
+
+}
+.izquierda h2 {
+    color: #b3ff00;
+    font-size: 1.5rem;
+}
+
+.row {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 20px;
+
+}

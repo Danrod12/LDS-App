@@ -27,8 +27,8 @@ class ObraMisionalForm(forms.ModelForm):
                 'placeholder': 'Ej: Visita a la familia Pérez',
                 'id': 'id_nombre'
             }),
-            'meta': forms.Select(attrs={
-                'class': 'form-select',
+            'meta': forms.TextInput(attrs={
+                'class': 'form-control',
                 'id': 'id_meta'
             }),
             'ordenanza_faltante': forms.Select(attrs={
@@ -67,20 +67,20 @@ class ObraMisionalForm(forms.ModelForm):
             condicion = self.instance.condicion_actual
 
         # Asignar lista correcta
-        if condicion == "MENOS_ACTIVOS":
-            self.fields["meta"].choices = Meta.MENOS_ACTIVOS
+        # if condicion == "MENOS_ACTIVOS":
+        #     self.fields["meta"].choices = Meta.MENOS_ACTIVOS
         
-        elif condicion == "ACTIVOS":
-            self.fields["meta"].choices = Meta.ACTIVOS
+        # elif condicion == "ACTIVOS":
+        #     self.fields["meta"].choices = Meta.ACTIVOS
 
-        elif condicion == "CONVERSOS":
-            self.fields["meta"].choices = Meta.CONVERSOS
+        # elif condicion == "CONVERSOS":
+        #     self.fields["meta"].choices = Meta.CONVERSOS
 
-        elif condicion in ["QUORUM", "SOCSOC"]:
-            self.fields["meta"].choices = Meta.QUORUM_SOCSOC
+        # elif condicion in ["QUORUM", "SOCSOC"]:
+        #     self.fields["meta"].choices = Meta.QUORUM_SOCSOC
 
-        elif condicion in ["HOMBRES", "MUJERES"]:
-            self.fields["meta"].choices = Meta.JOVENES
+        # elif condicion in ["HOMBRES", "MUJERES"]:
+        #     self.fields["meta"].choices = Meta.JOVENES
 
-        elif condicion == "INVESTIGADORES":
-            self.fields["meta"].choices = Meta.INVESTIGADORES
+        # elif condicion == "INVESTIGADORES":
+        #     self.fields["meta"].choices = Meta.INVESTIGADORES

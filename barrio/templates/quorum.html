@@ -2,32 +2,49 @@
 
 {% block content %}
 <div class="container-custom mt-4">
-
     <h2 class="text-center mb-4">Personas y Metas del Quorum</h2>
 
-    {% for item in obras %}
-    <div class="persona-item shadow-sm">
-        <div class="persona-nombre">{{ item.nombre }}</div>
-
-        {% if item.meta %}
-        <div class="persona-fecha">
-            <strong>Meta:</strong> {{ item.meta }}
+    <div class="row">
+        <!-- LISTA DE PERSONAS A LA IZQUIERDA (SOLO NOMBRES) -->
+        <div class="izquierda">
+            <h2> Personas</h2>
+            <ul class="lista-personas">
+                {% for item in obras %}
+                    <li class="personas">{{ item.nombre }}</li>
+                {% endfor %}
+            </ul>
         </div>
-        {% endif %}
 
-        <div class="persona-fecha">
-            <strong>Meta para:</strong> {{ item.fecha_meta|date:"M d, Y" }}
+        <!--  TARJETAS ORIGINALES A LA DERECHA -->
+        <div class="col-md-9">
+            <h2>Asignaciones</h2>
+            {% for item in obras %}
+            <div class="persona-item shadow-sm mb-3">
+                <div class="persona-nombre">{{ item.nombre }}</div>
+
+                {% if item.meta %}
+                <div class="persona-fecha">
+                    <strong>Meta:</strong> {{ item.meta }}
+                </div>
+                {% endif %}
+
+                <div class="persona-fecha">
+                    <strong>Meta para:</strong> {{ item.fecha_meta|date:"M d, Y" }}
+                </div>
+
+                <form method="POST" action="{% url 'marcar_completado' item.id %}" class="d-inline">
+                    {% csrf_token %}
+                    <input 
+                        type="checkbox" 
+                        name="done"
+                        onchange="this.form.submit()"
+                        {% if item.done %}checked{% endif %}
+                    >
+                    <label>Completado</label>
+                </form>
+            </div>
+            {% endfor %}
         </div>
-<form method="POST" action="{% url 'marcar_completado' item.id %}" class="d-inline">
-    {% csrf_token %}
-    <input 
-        type="checkbox" 
-        name="done"
-        onchange="this.form.submit()"
-        {% if item.done %}checked{% endif %}
-    >
-</form>
-
     </div>
-    {% endfor %}
+</div>
 {% endblock %}
