@@ -137,6 +137,14 @@ class ObraMisional(models.Model):
 
     # ✔ Ningún campo obligatorio, todos pueden ser NULL
     barrio = models.ForeignKey(Barrio, on_delete=models.CASCADE, null=True, blank=True)
+
+    persona = models.ForeignKey(
+            Persona,
+            on_delete=models.CASCADE,
+            null=True,
+            blank=True
+        )
+
     organizacion = models.CharField(max_length=20, choices=ORGANIZACIONES, null=True, blank=True)
     condicion_actual = models.CharField(max_length=20, choices=CONDICIONES, null=True, blank=True)
     nombre = models.CharField(max_length=120, null=True, blank=True)

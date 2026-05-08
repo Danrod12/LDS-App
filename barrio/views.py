@@ -59,9 +59,17 @@ def dashboard(request):
 
     # 🔥 ahora solo del barrio activo
     obras = ObraMisional.objects.filter(barrio_id=barrio_id)
+    persona = Persona.objects.filter(barrio_id=barrio_id)
 
     if request.method == 'POST':
         form = ObraMisionalForm(request.POST)
+        furm = PersonaForm(request.POST)
+        if furm.is_valid():
+            persona = furm.save(commit=False)
+            persona.barrio_id = barrio_id  # 🔗 clave del sistema
+            persona.save()
+            return redirect('dashboard')
+
         if form.is_valid():
             obra = form.save(commit=False)
             obra.barrio_id = barrio_id  # 🔗 clave del sistema
@@ -69,10 +77,13 @@ def dashboard(request):
             return redirect('dashboard')
     else:
         form = ObraMisionalForm()
+        furm = PersonaForm()
 
     return render(request, 'dashboard.html', {
         'form': form,
-        'obras': obras
+        'obras': obras,
+        'furm': furm,
+        'personas': persona
     })
 
 # ============================================
@@ -100,7 +111,9 @@ def quorum(request):
         return redirect("login_barrio")
 
     obras = ObraMisional.objects.filter(barrio_id=barrio_id, organizacion='QUORUM')
-    return render(request, 'quorum.html', {'obras': obras})
+    personas = Persona.objects.filter(barrio_id=barrio_id, organizacion='QUORUM')
+    combi = zip(obras, personas)
+    return render(request, 'quorum.html', {'obras': obras, 'personas': personas , 'combi': combi})
 
 
 def socsoc(request):
@@ -110,7 +123,9 @@ def socsoc(request):
         return redirect("login_barrio")
 
     obras = ObraMisional.objects.filter(barrio_id=barrio_id, organizacion='SOCSOC')
-    return render(request, 'socsoc.html', {'obras': obras})
+    personas = Persona.objects.filter(barrio_id=barrio_id, organizacion='SOCSOC')
+    combi = zip(obras, personas)
+    return render(request, 'socsoc.html', {'obras': obras, 'personas': personas , 'combi': combi})
 
 
 def hjovenes(request):
@@ -120,7 +135,9 @@ def hjovenes(request):
         return redirect("login_barrio")
 
     obras = ObraMisional.objects.filter(barrio_id=barrio_id, organizacion='HOMBRES')
-    return render(request, 'hjovenes.html', {'obras': obras})
+    personas = Persona.objects.filter(barrio_id=barrio_id, organizacion='HOMBRES')
+    combi = zip(obras, personas)
+    return render(request, 'hjovenes.html', {'obras': obras, 'personas': personas , 'combi': combi})
 
 
 def mjovenes(request):
@@ -130,7 +147,9 @@ def mjovenes(request):
         return redirect("login_barrio")
 
     obras = ObraMisional.objects.filter(barrio_id=barrio_id, organizacion='MUJERES')
-    return render(request, 'mjovenes.html', {'obras': obras})
+    personas = Persona.objects.filter(barrio_id=barrio_id, organizacion='MUJERES')
+    combi = zip(obras, personas)
+    return render(request, 'mjovenes.html', {'obras': obras, 'personas': personas , 'combi': combi})
 
 
 def primaria(request):
@@ -140,8 +159,9 @@ def primaria(request):
         return redirect("login_barrio")
 
     obras = ObraMisional.objects.filter(barrio_id=barrio_id, organizacion='PRIMARIA')
-    return render(request, 'primaria.html', {'obras': obras})
-
+    personas = Persona.objects.filter(barrio_id=barrio_id, organizacion='PRIMARIA')
+    combi = zip(obras, personas)
+    return render(request, 'primaria.html', {'obras': obras, 'personas': personas , 'combi': combi})
 
 # ============================================
 #             MARCAR COMPLETADO
@@ -189,3 +209,22 @@ def crear_persona(request):
     return render(request, "crear_persona.html", {
         "form": form
     })
+
+def buscar_personas(request):
+
+    texto = request.GET.get('q', '')
+
+    personas = Persona.objects.filter(
+        nombre__icontains=texto
+    )[:10]
+
+    resultados = []
+
+    for persona in personas:
+        resultados.append({
+            'id': persona.id,
+            'nombre': persona.nombre,
+            'organizacion': persona.organizacion,
+        })
+
+    return JsonResponse(resultados, safe=False)

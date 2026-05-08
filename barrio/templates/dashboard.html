@@ -13,29 +13,57 @@
 
       <form method="POST">
         {% csrf_token %}
+        <!-- Persona existente -->
+        <div class="mb-3">
+          <label for="id_persona" class="form-label fw-semibold">
+            Persona existente
+          </label>
+          
+          <select id="id_persona_nombre" name="personas">
+            <option value="">---------</option> {% for p in obras %}
+            <option value="{{ p.id }}">{{ p.nombre }}</option>
+            {% endfor %}
+            
+          </select>
+          {{ form.persona_nombre }}
+        </div>
+        
+        <!-- Nombre prueba -->
+        <!-- <label for="id_nombre" class="form-label fw-semibold">
+          Nombre prueba
+          <label for="id_nombre">First name:</label><br>
+          {% for x in obras %}
+            <p>Encontré una coincidencia: {{ x.nombre }}</p>
+            {% if x.persona %}
+            <span>Persona vinculada: {{ x.persona.nombre }}</span>
+              {% else %}
+                  <span>Obra: {{ x.nombre }}</span>
+              {% endif %}
+            {% endfor %}
 
-        <!-- Organizacíon -->
+
+        </label> -->
+
+
+        <!--NOMBRE-->
+        <div class="mb-3">
+          <label for="id_persona_nombre" class="form-label fw-semibold">Nombres</label>
+          {{ furm.nombre }}
+        </div>
+        <!-- ORGANIZACION -->
         <div class="mb-3">
           <label for="id_organizacion" class="form-label fw-semibold">Organización</label>
           {{ form.organizacion }}
         </div>
-
-        <!-- Nombre -->
+        <!--CONDICION-->
         <div class="mb-3">
           <label for="id_condicion_actual" class="form-label fw-semibold">Condición Actual</label>
           {{ form.condicion_actual }}
         </div>
-        <div class="mb-3">
-          <label for="id_nombre" class="form-label fw-semibold">Nombre</label>
-          {{ form.nombre }}
-        </div>
+        <!-- META -->
         <div class="mb-3">
           <label for="id_meta" class="form-label fw-semibold">Meta</label>
           {{ form.meta }}
-        </div>
-        <div class="mb-3">
-          <label for="id_ordenanza_faltante" class="form-label fw-semibold">Ordenanza Faltante</label>
-          {{ form.ordenanza_faltante }}
         </div>
         <!-- Fechas -->
         <div class="row">
@@ -43,7 +71,8 @@
             <label for="id_fecha_meta" class="form-label fw-semibold">Fecha Meta</label>
             {{ form.fecha_meta }}
         </div>
-    </div>
+    </div> 
+
     
     <!-- Completado -->
         <button type="submit" class="btn btn-primary w-100">Guardar</button>
@@ -71,7 +100,13 @@
           {% for o in obras %}
           <tr>
             <td>{{ o.organizacion }}</td>
-            <td>{{ o.nombre }}</td>
+            <td> 
+                {% if o.persona %}
+                        {{ o.persona.nombre }}
+                    {% else %}
+                        {{ o.nombre }}
+                    {% endif %}
+            </td>
             <td>{{ o.fecha_meta|date:"d/m/Y" }}</td>
             <td>{{ o.meta }}</td>
             <td>
@@ -96,7 +131,7 @@
         {% csrf_token %}
 
         <div class="mb-3">
-            {{ form.nombre }}
+            {{ form.persona }}
         </div>
 
         <div class="mb-3">

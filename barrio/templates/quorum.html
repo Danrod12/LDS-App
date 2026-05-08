@@ -16,35 +16,35 @@
         </div>
 
         <!--  TARJETAS ORIGINALES A LA DERECHA -->
-        <div class="col-md-9">
-            <h2>Asignaciones</h2>
-            {% for item in obras %}
-            <div class="persona-item shadow-sm mb-3">
-                <div class="persona-nombre">{{ item.nombre }}</div>
+            <div class="container-custom mt-4">
 
-                {% if item.meta %}
-                <div class="persona-fecha">
-                    <strong>Meta:</strong> {{ item.meta }}
-                </div>
-                {% endif %}
+                <h2 class="text-center mb-4">Personas y Metas del Quorum</h2>
 
-                <div class="persona-fecha">
-                    <strong>Meta para:</strong> {{ item.fecha_meta|date:"M d, Y" }}
-                </div>
+                {% for x, y  in combi %}
+                <div class="persona-item shadow-sm">
+                    <div class="persona-nombre">{{ y.nombre }}</div>
 
-                <form method="POST" action="{% url 'marcar_completado' item.id %}" class="d-inline">
-                    {% csrf_token %}
-                    <input 
-                        type="checkbox" 
-                        name="done"
-                        onchange="this.form.submit()"
-                        {% if item.done %}checked{% endif %}
-                    >
-                    <label>Completado</label>
-                </form>
-            </div>
-            {% endfor %}
-        </div>
+                    {% if x.meta %}
+                    <div class="persona-fecha">
+                        <strong>Meta:</strong> {{ x.meta }}
+                    </div>
+                    {% endif %}
+
+                    <div class="persona-fecha">
+                        <strong>Meta para:</strong> {{ x.fecha_meta|date:"M d, Y" }}
+                    </div>
+            <form method="POST" action="{% url 'marcar_completado' x.id %}" class="d-inline">
+                {% csrf_token %}
+                <input 
+                    type="checkbox" 
+                    name="done"
+                    onchange="this.form.submit()"
+                    {% if x.done %}checked{% endif %}
+                >
+            </form>
+
+    </div>
+    {% endfor %}
     </div>
 </div>
 {% endblock %}

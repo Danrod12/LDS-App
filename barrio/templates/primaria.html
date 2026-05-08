@@ -5,26 +5,26 @@
 
     <h2 class="text-center mb-4">Personas y Metas de la Primaria</h2>
 
-    {% for item in obras %}
+    {% for x, y  in combi %}
     <div class="persona-item shadow-sm">
-        <div class="persona-nombre">{{ item.nombre }}</div>
+        <div class="persona-nombre">{{ y.nombre }}</div>
 
-        {% if item.meta %}
+        {% if x.meta %}
         <div class="persona-fecha">
-            <strong>Meta:</strong> {{ item.meta }}
+            <strong>Meta:</strong> {{ x.meta }}
         </div>
         {% endif %}
-        
+
         <div class="persona-fecha">
-            <strong>Meta para:</strong> {{ item.fecha_meta|date:"M d, Y" }}
+            <strong>Meta para:</strong> {{ x.fecha_meta|date:"M d, Y" }}
         </div>
-<form method="POST" action="{% url 'marcar_completado' item.id %}" class="d-inline">
+<form method="POST" action="{% url 'marcar_completado' x.id %}" class="d-inline">
     {% csrf_token %}
     <input 
         type="checkbox" 
         name="done"
         onchange="this.form.submit()"
-        {% if item.done %}checked{% endif %}
+        {% if x.done %}checked{% endif %}
     >
 </form>
 

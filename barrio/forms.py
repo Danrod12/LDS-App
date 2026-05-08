@@ -9,7 +9,8 @@ class PersonaForm(forms.ModelForm):
             widgets = {
                 'nombre': forms.TextInput(attrs={
                     'class': 'form-control',
-                    'placeholder': 'Nombre de la persona'
+                    'placeholder': 'Nombre de la persona',
+                    'id': 'id_persona_nombre'
                 }),
                 'organizacion': forms.Select(attrs={
                     'class': 'form-select'
@@ -31,6 +32,10 @@ class ObraMisionalForm(forms.ModelForm):
             'fecha_meta'
         ]
         widgets = {
+            #  'persona': forms.Select(attrs={
+            #     'class': 'form-select',
+            #     'id': 'id_persona'
+            # }),
             'organizacion': forms.Select(attrs={
                 'class': 'form-select',
                 'id': 'id_organizacion'
