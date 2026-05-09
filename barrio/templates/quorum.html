@@ -9,7 +9,7 @@
         <div class="izquierda">
             <h2> Personas</h2>
             <ul class="lista-personas">
-                {% for item in obras %}
+                {% for item in personas %}
                     <li class="personas">{{ item.nombre }}</li>
                 {% endfor %}
             </ul>
@@ -17,8 +17,6 @@
 
         <!--  TARJETAS ORIGINALES A LA DERECHA -->
             <div class="container-custom mt-4">
-
-                <h2 class="text-center mb-4">Personas y Metas del Quorum</h2>
 
                 {% for x, y  in combi %}
                 <div class="persona-item shadow-sm">

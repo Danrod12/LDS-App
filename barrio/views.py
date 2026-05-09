@@ -60,6 +60,7 @@ def dashboard(request):
     # 🔥 ahora solo del barrio activo
     obras = ObraMisional.objects.filter(barrio_id=barrio_id)
     persona = Persona.objects.filter(barrio_id=barrio_id)
+    combi = zip(obras, persona)
 
     if request.method == 'POST':
         form = ObraMisionalForm(request.POST)
@@ -83,7 +84,8 @@ def dashboard(request):
         'form': form,
         'obras': obras,
         'furm': furm,
-        'personas': persona
+        'personas': persona,
+        'combi': combi
     })
 
 # ============================================
@@ -110,7 +112,7 @@ def quorum(request):
     if not barrio_id:
         return redirect("login_barrio")
 
-    obras = ObraMisional.objects.filter(barrio_id=barrio_id, organizacion='QUORUM')
+    obras = ObraMisional.objects.filter(barrio_id=barrio_id, persona__organizacion='QUORUM')
     personas = Persona.objects.filter(barrio_id=barrio_id, organizacion='QUORUM')
     combi = zip(obras, personas)
     return render(request, 'quorum.html', {'obras': obras, 'personas': personas , 'combi': combi})
@@ -122,22 +124,27 @@ def socsoc(request):
     if not barrio_id:
         return redirect("login_barrio")
 
-    obras = ObraMisional.objects.filter(barrio_id=barrio_id, organizacion='SOCSOC')
+    obras = ObraMisional.objects.filter(barrio_id=barrio_id, persona__organizacion='SOCSOC')
     personas = Persona.objects.filter(barrio_id=barrio_id, organizacion='SOCSOC')
     combi = zip(obras, personas)
     return render(request, 'socsoc.html', {'obras': obras, 'personas': personas , 'combi': combi})
 
 
 def hjovenes(request):
+    
     barrio_id = request.session.get("barrio_id")
 
     if not barrio_id:
         return redirect("login_barrio")
 
-    obras = ObraMisional.objects.filter(barrio_id=barrio_id, organizacion='HOMBRES')
-    personas = Persona.objects.filter(barrio_id=barrio_id, organizacion='HOMBRES')
-    combi = zip(obras, personas)
-    return render(request, 'hjovenes.html', {'obras': obras, 'personas': personas , 'combi': combi})
+    personas = Persona.objects.filter(
+        barrio_id=barrio_id,
+        organizacion='HOMBRES'
+    )
+
+    return render(request, 'hjovenes.html', {
+        'personas': personas
+    })
 
 
 def mjovenes(request):
@@ -146,7 +153,7 @@ def mjovenes(request):
     if not barrio_id:
         return redirect("login_barrio")
 
-    obras = ObraMisional.objects.filter(barrio_id=barrio_id, organizacion='MUJERES')
+    obras = ObraMisional.objects.filter(barrio_id=barrio_id, persona__organizacion='MUJERES')
     personas = Persona.objects.filter(barrio_id=barrio_id, organizacion='MUJERES')
     combi = zip(obras, personas)
     return render(request, 'mjovenes.html', {'obras': obras, 'personas': personas , 'combi': combi})
@@ -158,11 +165,14 @@ def primaria(request):
     if not barrio_id:
         return redirect("login_barrio")
 
-    obras = ObraMisional.objects.filter(barrio_id=barrio_id, organizacion='PRIMARIA')
-    personas = Persona.objects.filter(barrio_id=barrio_id, organizacion='PRIMARIA')
-    combi = zip(obras, personas)
-    return render(request, 'primaria.html', {'obras': obras, 'personas': personas , 'combi': combi})
+    personas = Persona.objects.filter(
+        barrio_id=barrio_id,
+        organizacion='PRIMARIA'
+    )
 
+    return render(request, 'primaria.html', {
+        'personas': personas
+    })
 # ============================================
 #             MARCAR COMPLETADO
 # ============================================

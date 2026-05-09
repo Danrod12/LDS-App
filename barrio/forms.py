@@ -2,34 +2,16 @@ from django import forms
 from .models import *
 
 class PersonaForm(forms.ModelForm):
-        class Meta:
-            model = Persona
-            fields = ['nombre', 'organizacion']
 
-            widgets = {
-                'nombre': forms.TextInput(attrs={
-                    'class': 'form-control',
-                    'placeholder': 'Nombre de la persona',
-                    'id': 'id_persona_nombre'
-                }),
-                'organizacion': forms.Select(attrs={
-                    'class': 'form-select'
-                }),
-            }
-            
-class ObraMisionalForm(forms.ModelForm):
-
-
-
+    # FORM DE PERSONA
     class Meta:
-        model = ObraMisional
+        model = Persona
+
         fields = [
             'organizacion',
             'condicion_actual',
             'nombre',
-            'meta',
             'ordenanza_faltante',
-            'fecha_meta'
         ]
         widgets = {
             #  'persona': forms.Select(attrs={
@@ -49,44 +31,110 @@ class ObraMisionalForm(forms.ModelForm):
                 'placeholder': 'Ej: Visita a la familia Pérez',
                 'id': 'id_nombre'
             }),
-            'meta': forms.TextInput(attrs={
-                'class': 'form-control',
-                'id': 'id_meta'
-            }),
+            
             'ordenanza_faltante': forms.Select(attrs={
                 'class': 'form-select',
                 'id': 'id_ordenanza_faltante'
             }),
-            'fecha_meta': forms.DateInput(attrs={
-                'type': 'date',
-                'class': 'form-control',
-                'id': 'id_fecha_meta'
-            }),
+            
         }
         labels = {
             'organizacion': 'Organización',
             'condicion_actual': 'Condición Actual',
             'nombre': 'Nombre',
-            'meta': 'Meta',
             'ordenanza_faltante': 'Ordenanza Faltante',
-            'fecha_meta': 'Fecha meta',
         }
-
-    # ----------------------------------------------
-    #  METAS DINÁMICAS SEGÚN LA CONDICIÓN ACTUAL
-    # ----------------------------------------------
+        
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
         condicion = None
 
-        # Para POST (cuando el usuario cambia condicion_actual)
+            # Para POST (cuando el usuario cambia condicion_actual)
         if "condicion_actual" in self.data:
             condicion = self.data.get("condicion_actual")
+        #  METAS DINÁMICAS SEGÚN LA CONDICIÓN ACTUAL
+        # ----------------------------------------------
 
-        # Para EDICIÓN (si el objeto ya existe)
+            # Para EDICIÓN (si el objeto ya existe)
         elif self.instance.pk:
             condicion = self.instance.condicion_actual
+
+class ObraMisionalForm(forms.ModelForm):
+
+    class Meta:
+        model = ObraMisional
+
+        fields = [
+            'persona',
+            'meta',
+            'fecha_meta',
+            'responsable',
+            'nota',
+        ]
+
+        widgets = {
+
+            'persona': forms.Select(attrs={
+                'class': 'form-select',
+                'id': 'id_persona'
+            }),
+
+            'meta': forms.TextInput(attrs={
+                'class': 'form-control',
+                'id': 'id_meta'
+            }),
+
+            'fecha_meta': forms.DateInput(attrs={
+                'type': 'date',
+                'class': 'form-control',
+                'id': 'id_fecha_meta'
+            }),
+
+            'responsable': forms.TextInput(attrs={
+                'class': 'form-control',
+                'id': 'id_responsable'
+            }),
+            'nota': forms.TextInput(attrs={
+                'class': 'form-control',
+                'id': 'id_nota',
+            }),
+
+        }
+
+        labels = {
+
+            'persona': 'Persona',
+            'meta': 'Meta',
+            'fecha_meta': 'Fecha Meta',
+            'responsable': 'Responsable',
+            'nota': 'Nota',
+
+        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        condicion = None
+
+        # Cuando el usuario selecciona persona
+        if "persona" in self.data:
+
+            try:
+                persona_id = self.data.get("persona")
+                persona = Persona.objects.get(id=persona_id)
+
+                condicion = persona.condicion_actual
+
+            except:
+                pass
+
+        # Cuando se está editando
+        elif self.instance.pk and self.instance.persona:
+
+            condicion = self.instance.persona.condicion_actual
+
+    # ----------------------------------------------
 
         # Asignar lista correcta
         # if condicion == "MENOS_ACTIVOS":

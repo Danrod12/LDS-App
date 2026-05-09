@@ -1,34 +1,21 @@
-menu= int(input("Bienvenido a la calculadora Fidelitas, seleccione la operacion que desea realizar:1. Sumar,2. Restar,3. Multiplicar,4. Dividir)"))
+import pywhatkit as kit
+import datetime
+import pyautogui # Importamos la herramienta de teclado
+import time
 
-def sumar(x, y):
-    resultado = x + y
-    return resultado
+hora = datetime.datetime.now().hour
+minuto = datetime.datetime.now().minute + 1
 
-def restar(x, y):
-    return x - y
+# Ejecutamos la función
+kit.sendwhatmsg(
+    "+50671691824",
+    "Hola, este es un mensaje automático",
+    hora,
+    minuto,
+    15, True, 3
+)
 
-def multiplicar(x, y):
-    resultado = x * y
-    return resultado
-
-def dividir(x, y):
-    resultado = x / y
-    return resultado
-
-
-# Proceso inicial
-a = int(input("Primer número: "))
-b = int(input("Segundo número: "))
-
-if menu == 1:
-    resultado = sumar(a, b)
-    print("La suma es:", resultado)
-elif menu == 2:
-    resultado = restar(a, b)
-    print("La resta es:", resultado)
-elif menu == 3:
-    resultado = multiplicar(a, b)
-    print("La multiplicación es:", resultado)
-elif menu == 4:
-    resultado = dividir(a, b)
-    print("La división es:", resultado)
+# TRUCO EXTRA: Forzar el Enter manualmente por código
+# Esperamos 20 segundos (15 de carga + unos 5 de margen)
+time.sleep(20) 
+pyautogui.press('enter')

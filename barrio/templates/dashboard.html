@@ -2,193 +2,218 @@
 {% block title %}Dashboard{% endblock %}
 {% load static %}
 {% block content %}
+
 <div class="container mt-5">
 
-  <h2 class="text-center mb-4">Panel de Obras Misionales</h2>
+  <h2 class="text-center mb-4">
+    Panel de Obras Misionales
+  </h2>
 
   <!-- 🔹 Formulario para crear nueva obra -->
   <div class="card shadow-sm mb-5">
+
     <div class="card-body">
-      <h5 class="card-title mb-3">Agregar nueva obra</h5>
+
+      <h5 class="card-title mb-3">
+        Agregar nueva obra
+      </h5>
 
       <form method="POST">
+
         {% csrf_token %}
-        <!-- Persona existente -->
+
+        <!-- PERSONA -->
         <div class="mb-3">
-          <label for="id_persona" class="form-label fw-semibold">
+
+          <label for="id_persona"
+                 class="form-label fw-semibold">
+
             Persona existente
+
           </label>
-          
-          <select id="id_persona_nombre" name="personas">
-            <option value="">---------</option> {% for p in obras %}
-            <option value="{{ p.id }}">{{ p.nombre }}</option>
-            {% endfor %}
-            
-          </select>
-          {{ form.persona_nombre }}
-        </div>
-        
-        <!-- Nombre prueba -->
-        <!-- <label for="id_nombre" class="form-label fw-semibold">
-          Nombre prueba
-          <label for="id_nombre">First name:</label><br>
-          {% for x in obras %}
-            <p>Encontré una coincidencia: {{ x.nombre }}</p>
-            {% if x.persona %}
-            <span>Persona vinculada: {{ x.persona.nombre }}</span>
-              {% else %}
-                  <span>Obra: {{ x.nombre }}</span>
-              {% endif %}
-            {% endfor %}
 
+          {{ form.persona }}
 
-        </label> -->
+        </div>
 
-
-        <!--NOMBRE-->
-        <div class="mb-3">
-          <label for="id_persona_nombre" class="form-label fw-semibold">Nombres</label>
-          {{ furm.nombre }}
-        </div>
-        <!-- ORGANIZACION -->
-        <div class="mb-3">
-          <label for="id_organizacion" class="form-label fw-semibold">Organización</label>
-          {{ form.organizacion }}
-        </div>
-        <!--CONDICION-->
-        <div class="mb-3">
-          <label for="id_condicion_actual" class="form-label fw-semibold">Condición Actual</label>
-          {{ form.condicion_actual }}
-        </div>
         <!-- META -->
         <div class="mb-3">
-          <label for="id_meta" class="form-label fw-semibold">Meta</label>
+
+          <label for="id_meta"
+                 class="form-label fw-semibold">
+
+            Meta
+
+          </label>
+
           {{ form.meta }}
+
         </div>
-        <!-- Fechas -->
+        
+        <div class="mb-3">
+
+          <label for="id_responsable"
+                 class="form-label fw-semibold">
+
+            Responsable
+
+          </label>
+
+          {{ form.responsable }}
+        </div>
+        <div class="mb-3">
+
+          <label for="id_notas"
+                 class="form-label fw-semibold">
+
+            Anotaciones
+
+          </label>
+
+          {{ form.nota }}
+        </div>
+
+
+        <!-- FECHA -->
         <div class="row">
-        <div class="col-md-6 mb-3">
-            <label for="id_fecha_meta" class="form-label fw-semibold">Fecha Meta</label>
+
+          <div class="col-md-6 mb-3">
+
+            <label for="id_fecha_meta"
+                   class="form-label fw-semibold">
+
+              Fecha Meta
+
+            </label>
+
             {{ form.fecha_meta }}
+
+          </div>
+
         </div>
-    </div> 
 
-    
-    <!-- Completado -->
-        <button type="submit" class="btn btn-primary w-100">Guardar</button>
-    </form>
-</div>
-</div>
+        <!-- BOTÓN -->
+        <button type="submit"
+                class="btn btn-primary w-100">
 
-  <!-- 🔹 Tabla para mostrar obras existentes -->
+          Guardar
+
+        </button>
+
+      </form>
+
+    </div>
+
+  </div>
+
+  <!-- 🔹 Tabla -->
   <div class="card shadow-sm">
+
     <div class="card-body">
-      <h5 class="card-title mb-3">Obras registradas</h5>
-      
+
+      <h5 class="card-title mb-3">
+        Obras registradas
+      </h5>
+
       {% if obras %}
+
       <table class="table table-hover align-middle">
-          <thead>
-              <tr>
+
+        <thead>
+
+          <tr>
+
             <th>Organización</th>
             <th>Nombre</th>
-            <th>Inicio</th>
+            <th>Fecha</th>
             <th>Meta</th>
             <th>Completado</th>
+
           </tr>
+
         </thead>
+
         <tbody>
+
           {% for o in obras %}
+
           <tr>
-            <td>{{ o.organizacion }}</td>
-            <td> 
-                {% if o.persona %}
-                        {{ o.persona.nombre }}
-                    {% else %}
-                        {{ o.nombre }}
-                    {% endif %}
-            </td>
+
+            <td>{{ o.persona.organizacion }}</td>
+
+            <td>{{ o.persona.nombre }}</td>
+
             <td>{{ o.fecha_meta|date:"d/m/Y" }}</td>
+
             <td>{{ o.meta }}</td>
+
             <td>
-                {% if o.done %}
+
+              {% if o.done %}
                 ✅
-                {% else %}
+              {% else %}
                 ❌
-                {% endif %}
+              {% endif %}
+
             </td>
+
           </tr>
+
           {% endfor %}
+
         </tbody>
-    </table>
-    {% else %}
-    <p class="text-muted">Aún no hay obras registradas.</p>
-    {% endif %}
-<div class="container mt-4">
+
+      </table>
+
+      {% else %}
+
+      <p class="text-muted">
+        Aún no hay obras registradas.
+      </p>
+
+      {% endif %}
+
+    </div>
+
+  </div>
+
+  <!-- 🔹 CREAR PERSONA -->
+  <div class="container mt-4">
 
     <h2>Crear Persona</h2>
 
     <form method="POST">
-        {% csrf_token %}
 
-        <div class="mb-3">
-            {{ form.persona }}
-        </div>
+      {% csrf_token %}
 
-        <div class="mb-3">
-            {{ form.organizacion }}
-        </div>
+      <div class="mb-3">
 
-        <button class="btn btn-primary">
-            Guardar Persona
-        </button>
+        {{ furm.nombre }}
+
+      </div>
+
+      <div class="mb-3">
+
+        {{ furm.organizacion }}
+
+      </div>
+
+      <div class="mb-3">
+
+        {{ furm.condicion_actual }}
+
+      </div>
+
+      <button class="btn btn-primary">
+
+        Guardar Persona
+
+      </button>
+
     </form>
 
-</div>
-</div>
-</div>
+  </div>
 
 </div>
-
-
-<script>
-document.addEventListener("DOMContentLoaded", () => {
-    const condicionSelect = document.getElementById("id_condicion_actual");
-    const metaSelect = document.getElementById("id_meta");
-
-    condicionSelect.addEventListener("change", function() {
-        const condicion = this.value;
-
-        fetch(`/cargar_metas/?condicion=${condicion}`)
-        .then(response => response.json())
-        .then(data => {
-            metaSelect.innerHTML = ""; // limpia
-
-            data.forEach(item => {
-                const option = document.createElement("option");
-                option.value = item[0];
-                option.textContent = item[1];
-                metaSelect.appendChild(option);
-            });
-        });
-    });
-});
-</script>
 
 {% endblock %}
-
-
-{% comment %} {% extends "base.html" %}
-
-{% block content %} 
-
-
-<select>
-    {% for clave, organizacion in organizaciones %}
-        <option value=>{{ organizacion }}</option>
-    {% endfor %}
-</select>
-
-
-
-
-{% endblock %} {% endcomment %}

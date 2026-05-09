@@ -61,7 +61,9 @@ from django.db import models
 #         verbose_name = "Meta"
 #         verbose_name_plural = "Metas"
 
-
+# ============================================
+#              MODELO BARRIO
+# ============================================
 class Barrio(models.Model):
     nombre = models.CharField(max_length=120)
     estaca = models.CharField(max_length=120)
@@ -82,7 +84,7 @@ class Barrio(models.Model):
     def __str__(self):
         return f"{self.nombre} ({self.codigo})"
 # ============================================
-#              MODELO OBRA MISIONAL
+#              MODELO PERSONA
 # ============================================
 class Persona(models.Model):
 
@@ -99,29 +101,6 @@ class Persona(models.Model):
         on_delete=models.CASCADE
     )
 
-    nombre = models.CharField(max_length=120)
-
-    organizacion = models.CharField(
-        max_length=20,
-        choices=ORGANIZACIONES
-    )
-
-    activo = models.BooleanField(default=True)
-
-    def __str__(self):
-        return self.nombre
-    
-    
-class ObraMisional(models.Model):
-
-    ORGANIZACIONES = [
-        ("QUORUM", "Quórum de Élderes"),
-        ("SOCSOC", "Sociedad de Socorro"),
-        ("HOMBRES", "Hombres Jóvenes"),
-        ("MUJERES", "Mujeres Jóvenes"),
-        ("PRIMARIA", "Primaria"),
-    ]
-
     CONDICIONES = [
         ("MENOS_ACTIVOS", "Menos activos"),
         ("ACTIVOS", "Activos"),
@@ -135,24 +114,35 @@ class ObraMisional(models.Model):
         ("SELLAMIENTO", "Sellamiento"),
     ]
 
+    nombre = models.CharField(max_length=120)
+    organizacion = models.CharField(max_length=20,choices=ORGANIZACIONES)
+    activo = models.BooleanField(default=True)
+    condicion_actual = models.CharField(max_length=20, choices=CONDICIONES, null=True, blank=True)
+    ordenanza_faltante = models.CharField(max_length=50, choices=ORDENANZAS, null=True, blank=True)
+
+    def __str__(self):
+        return self.nombre
+    
+    
+# ============================================
+#              MODELO OBRA MISIONAL
+# ============================================
+class ObraMisional(models.Model):
+
+
     # ✔ Ningún campo obligatorio, todos pueden ser NULL
     barrio = models.ForeignKey(Barrio, on_delete=models.CASCADE, null=True, blank=True)
 
-    persona = models.ForeignKey(
-            Persona,
-            on_delete=models.CASCADE,
-            null=True,
-            blank=True
-        )
-
-    organizacion = models.CharField(max_length=20, choices=ORGANIZACIONES, null=True, blank=True)
-    condicion_actual = models.CharField(max_length=20, choices=CONDICIONES, null=True, blank=True)
-    nombre = models.CharField(max_length=120, null=True, blank=True)
+    persona = models.ForeignKey(Persona, on_delete=models.CASCADE, null=True, blank=True)
     meta = models.CharField(max_length=50, null=True, blank=True)
-    ordenanza_faltante = models.CharField(max_length=50, choices=ORDENANZAS, null=True, blank=True)
     fecha_meta = models.DateField(null=True, blank=True)
     done = models.BooleanField(default=False)
+    responsable = models.CharField(max_length=120, null=True, blank=True)
+    nota = models.TextField(null=True, blank=True)
 
     def __str__(self):
-        return self.nombre or "Sin nombre"
+        if self.persona:
+            return f"{self.persona.nombre} - {self.meta}"
+
+        return "Sin persona"
 
